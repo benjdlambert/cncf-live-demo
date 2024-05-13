@@ -37,7 +37,7 @@ WORKDIR /app
 ENV NODE_ENV production
 
 COPY .yarn ./.yarn
-COPY .yarnrc.yml ./
+COPY yarn.lock .yarnrc.yml ./
 
 # Copy repo skeleton first, to avoid unnecessary docker cache invalidation.
 # The skeleton contains the package.json of each package in the monorepo,
