@@ -18,6 +18,21 @@ auth:
   providers:
     guest: {}
 
+kubernetes:
+  serviceLocatorMethod:
+    type: 'multiTenant'
+  clusterLocatorMethods:
+    - type: 'config'
+      clusters:
+        # taken from kubeconfig, might need to be changed for you. Run `kubectl config view --minify --output json` to find the server URL
+        - name: 'linkerd-backstage-test-cluster'
+          authProvider: 'serviceAccount'
+          url: https://kubernetes.default.svc
+          serviceAccountToken: ${K8S_SA_TOKEN}
+          skipTLSVerify: true
+
+
+
 catalog:
   # Overrides the default list locations from app-config.yaml as these contain example data.
   # See https://backstage.io/docs/features/software-catalog/#adding-components-to-the-catalog for more details

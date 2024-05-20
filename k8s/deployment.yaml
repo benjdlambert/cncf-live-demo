@@ -1,0 +1,29 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: backstage
+  namespace: backstage
+  labels:
+    app: backstage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstage
+  template:
+    metadata:
+      labels:
+        app: backstage
+    spec:
+      containers:
+        - name: backstage
+          image: ghcr.io/benjdlambert/cncf-live-demo:main
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7007
+          env:
+            - name: K8S_SA_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: backstage
+                  key: token
