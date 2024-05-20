@@ -16,22 +16,21 @@ backend:
 
 auth:
   providers:
-    guest: {}
+    guest: 
+      dangerouslyAllowOutsideDevelopment: true
 
 kubernetes:
   serviceLocatorMethod:
-    type: 'multiTenant'
+    type: multiTenant
   clusterLocatorMethods:
-    - type: 'config'
+    - type: config
       clusters:
         # taken from kubeconfig, might need to be changed for you. Run `kubectl config view --minify --output json` to find the server URL
-        - name: 'linkerd-backstage-test-cluster'
-          authProvider: 'serviceAccount'
+        - name: Test Cluster 1
+          authProvider: serviceAccount
           url: https://kubernetes.default.svc
           serviceAccountToken: ${K8S_SA_TOKEN}
           skipTLSVerify: true
-
-
 
 catalog:
   # Overrides the default list locations from app-config.yaml as these contain example data.
