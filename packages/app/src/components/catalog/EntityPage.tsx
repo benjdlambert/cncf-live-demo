@@ -31,13 +31,14 @@ import {
 import {
   isGithubActionsAvailable,
   EntityGithubActionsContent,
-} from '@backstage/plugin-github-actions';
+} from '@backstage-community/plugin-github-actions';
 import {
   EntityUserProfileCard,
   EntityGroupProfileCard,
   EntityMembersListCard,
   EntityOwnershipCard,
 } from '@backstage/plugin-org';
+import { LinkerdIsMeshedBanner } from '@backstage-community/plugin-linkerd';
 import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { EmptyState } from '@backstage/core-components';
 import {
@@ -124,6 +125,7 @@ const entityWarningContent = (
 const overviewContent = (
   <Grid container spacing={3} alignItems="stretch">
     {entityWarningContent}
+    <LinkerdIsMeshedBanner />
     <Grid item md={6}>
       <EntityAboutCard variant="gridItem" />
     </Grid>
