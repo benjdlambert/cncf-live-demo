@@ -10,7 +10,7 @@ COPY .yarnrc.yml ./
 COPY packages packages
 # COPY plugins plugins
 
-COPY examples examples
+
 
 RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -print | xargs rm -rf
 
@@ -87,6 +87,8 @@ COPY --from=build --chown=node:node /app/packages/backend/dist/bundle/ ./
 
 # Copy any other files that we need at runtime
 COPY --chown=node:node app-config.yaml app-config.*.yaml ./
+
+COPY examples examples
 
 ENV PORT 7007
 # This switches many Node.js dependencies to production mode.
