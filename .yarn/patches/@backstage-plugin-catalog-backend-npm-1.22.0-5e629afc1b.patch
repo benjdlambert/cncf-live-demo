@@ -1,5 +1,5 @@
 diff --git a/dist/cjs/CatalogBuilder-g0TDave-.cjs.js b/dist/cjs/CatalogBuilder-g0TDave-.cjs.js
-index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a96ebae720 100644
+index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..a9706f7239e708cb0fd51eebc485809bf6ca22c0 100644
 --- a/dist/cjs/CatalogBuilder-g0TDave-.cjs.js
 +++ b/dist/cjs/CatalogBuilder-g0TDave-.cjs.js
 @@ -1,53 +1,63 @@
@@ -1646,7 +1646,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
                    });
                  });
                }
-@@ -1886,32 +2108,58 @@ class DefaultCatalogProcessingEngine {
+@@ -1886,32 +2108,63 @@ class DefaultCatalogProcessingEngine {
                await this.processingDatabase.transaction(async (tx) => {
                  await this.processingDatabase.updateEntityCache(tx, {
                    id,
@@ -1670,12 +1670,15 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
 -              (_c = this.eventBroker) == null ? void 0 : _c.publish({
 -                topic: CATALOG_ERRORS_TOPIC,
 -                eventPayload: {
--                  entity: entityRef,
--                  location,
++              for (const error of result.errors) {
++                this.logger.warn(error.message, {
+                   entity: entityRef,
+                   location,
 -                  errors: result.errors
 -                }
 -              });
-+              console.warn(JSON.stringify(result.errors, null, 2));
++                });
++              }
 +              (_c = this.eventBroker) == null
 +                ? void 0
 +                : _c.publish({
@@ -1721,7 +1724,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              }
              const resultHash = hashBuilder.digest("hex");
              if (resultHash === previousResultHash) {
-@@ -1919,30 +2167,34 @@ class DefaultCatalogProcessingEngine {
+@@ -1919,30 +2172,34 @@ class DefaultCatalogProcessingEngine {
                return;
              }
              if (!result.ok) {
@@ -1772,7 +1775,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
                });
                track.markSuccessfulWithErrors();
                return;
-@@ -1950,31 +2202,34 @@ class DefaultCatalogProcessingEngine {
+@@ -1950,31 +2207,34 @@ class DefaultCatalogProcessingEngine {
              result.completedEntity.metadata.uid = id;
              let oldRelationSources;
              await this.processingDatabase.transaction(async (tx) => {
@@ -1820,7 +1823,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              ]);
              newRelationSources.forEach((sourceEntityRef, uniqueKey) => {
                if (!oldRelationSources.has(uniqueKey)) {
-@@ -1987,7 +2242,7 @@ class DefaultCatalogProcessingEngine {
+@@ -1987,7 +2247,7 @@ class DefaultCatalogProcessingEngine {
                }
              });
              await this.stitcher.stitch({
@@ -1829,7 +1832,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              });
              track.markSuccessfulWithChanges();
            } catch (error) {
-@@ -1995,22 +2250,24 @@ class DefaultCatalogProcessingEngine {
+@@ -1995,22 +2255,24 @@ class DefaultCatalogProcessingEngine {
              track.markFailed(error);
            }
          });
@@ -1859,7 +1862,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          });
          if (n > 0) {
            this.logger.info(`Deleted ${n} orphaned entities`);
-@@ -2026,7 +2283,7 @@ class DefaultCatalogProcessingEngine {
+@@ -2026,7 +2288,7 @@ class DefaultCatalogProcessingEngine {
          frequency: { milliseconds: this.orphanCleanupIntervalMs },
          timeout: { milliseconds: this.orphanCleanupIntervalMs * 0.8 },
          fn: runOnce,
@@ -1868,7 +1871,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
        return () => {
          abortController.abort();
-@@ -2042,21 +2299,21 @@ function progressTracker$1() {
+@@ -2042,21 +2304,21 @@ function progressTracker$1() {
    const promProcessedEntities = createCounterMetric({
      name: "catalog_processed_entities_count",
      help: "Amount of entities processed, DEPRECATED, use OpenTelemetry metrics instead",
@@ -1894,7 +1897,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    });
    const meter = api.metrics.getMeter("default");
    const processedEntities = meter.createCounter(
-@@ -2067,21 +2324,22 @@ function progressTracker$1() {
+@@ -2067,21 +2329,22 @@ function progressTracker$1() {
      "catalog.processing.duration",
      {
        description: "Time spent executing the full processing flow",
@@ -1921,7 +1924,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      }
    );
    function processStart(item, logger) {
-@@ -2101,7 +2359,7 @@ function progressTracker$1() {
+@@ -2101,7 +2364,7 @@ function progressTracker$1() {
      function markProcessorsCompleted(result) {
        endProcessorsTimer({ result: result.ok ? "ok" : "failed" });
        processorsDuration.record(endTime(), {
@@ -1930,7 +1933,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
      }
      function markSuccessfulWithNoChanges() {
-@@ -2132,16 +2390,20 @@ function progressTracker$1() {
+@@ -2132,16 +2395,20 @@ function progressTracker$1() {
        markSuccessfulWithNoChanges,
        markSuccessfulWithErrors,
        markSuccessfulWithChanges,
@@ -1955,7 +1958,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      this.store = store;
      this.orchestrator = orchestrator;
      this.options = options;
-@@ -2170,7 +2432,9 @@ class DefaultLocationService {
+@@ -2170,7 +2437,9 @@ class DefaultLocationService {
      return this.store.deleteLocation(id);
    }
    getLocationByEntity(entityRef) {
@@ -1966,7 +1969,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    }
    async processEntities(unprocessedEntities) {
      const entities = [];
-@@ -2181,13 +2445,17 @@ class DefaultLocationService {
+@@ -2181,13 +2450,17 @@ class DefaultLocationService {
        }
        const processed = await this.orchestrator.process({
          entity: currentEntity.entity,
@@ -1988,7 +1991,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            throw new errors.InputError(
              `Duplicate nested entity: ${catalogModel.stringifyEntityRef(
                processed.completedEntity
-@@ -2203,36 +2471,38 @@ class DefaultLocationService {
+@@ -2203,36 +2476,38 @@ class DefaultLocationService {
      return entities;
    }
    async dryRunCreateLocation(spec) {
@@ -2037,7 +2040,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      };
    }
  }
-@@ -2254,11 +2524,16 @@ async function requireRequestBody(req) {
+@@ -2254,11 +2529,16 @@ async function requireRequestBody(req) {
    }
    return body;
  }
@@ -2059,7 +2062,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  async function validateRequestBody(req, schema) {
    const body = await requireRequestBody(req);
    try {
-@@ -2269,7 +2544,9 @@ async function validateRequestBody(req, schema) {
+@@ -2269,7 +2549,9 @@ async function validateRequestBody(req, schema) {
  }
  function disallowReadonlyMode(readonly) {
    if (readonly) {
@@ -2070,7 +2073,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    }
  }
  function isQueryEntitiesInitialRequest(input) {
-@@ -2284,26 +2561,32 @@ function isQueryEntitiesCursorRequest(input) {
+@@ -2284,26 +2566,32 @@ function isQueryEntitiesCursorRequest(input) {
    }
    return !!input.cursor;
  }
@@ -2113,7 +2116,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  });
  function encodeCursor(cursor) {
    const json = JSON.stringify(cursor);
-@@ -2323,14 +2606,22 @@ function decodeCursor(encodedCursor) {
+@@ -2323,14 +2611,22 @@ function decodeCursor(encodedCursor) {
  }
  
  var __defProp$7 = Object.defineProperty;
@@ -2138,7 +2141,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  };
  const DEFAULT_LIMIT = 20;
  function parsePagination(input) {
-@@ -2350,13 +2641,17 @@ function parsePagination(input) {
+@@ -2350,13 +2646,17 @@ function parsePagination(input) {
    }
    if (cursor.limit !== void 0) {
      if (!Number.isInteger(cursor.limit)) {
@@ -2158,7 +2161,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      }
      offset = cursor.offset;
    }
-@@ -2368,17 +2663,27 @@ function stringifyPagination(input) {
+@@ -2368,17 +2668,27 @@ function stringifyPagination(input) {
    const base64 = Buffer.from(json, "utf8").toString("base64");
    return base64;
  }
@@ -2195,7 +2198,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    queryBuilder.andWhere(entityIdField, negate ? "not in" : "in", matchQuery);
  }
  function isEntitiesSearchFilter(filter) {
-@@ -2390,7 +2695,13 @@ function isOrEntityFilter(filter) {
+@@ -2390,7 +2700,13 @@ function isOrEntityFilter(filter) {
  function isNegationEntityFilter(filter) {
    return filter.hasOwnProperty("not");
  }
@@ -2210,7 +2213,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    if (isNegationEntityFilter(filter)) {
      return parseFilter(filter.not, query, db, !negate, entityIdField);
    }
-@@ -2403,14 +2714,14 @@ function parseFilter(filter, query, db, negate = false, entityIdField = "entity_
+@@ -2403,14 +2719,14 @@ function parseFilter(filter, query, db, negate = false, entityIdField = "entity_
      var _a, _b;
      if (isOrEntityFilter(filter)) {
        for (const subFilter of (_a = filter.anyOf) != null ? _a : []) {
@@ -2229,7 +2232,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          );
        }
      }
-@@ -2429,15 +2740,19 @@ class DefaultEntitiesCatalog {
+@@ -2429,15 +2745,19 @@ class DefaultEntitiesCatalog {
      var _a, _b;
      const db = this.database;
      let entitiesQuery = db("final_entities").select("final_entities.*");
@@ -2258,7 +2261,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      entitiesQuery = entitiesQuery.whereNotNull("final_entities.final_entity");
      if (request == null ? void 0 : request.filter) {
        entitiesQuery = parseFilter(
-@@ -2448,20 +2763,24 @@ class DefaultEntitiesCatalog {
+@@ -2448,20 +2768,24 @@ class DefaultEntitiesCatalog {
          "final_entities.entity_id"
        );
      }
@@ -2296,7 +2299,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      if (limit !== void 0) {
        entitiesQuery = entitiesQuery.limit(limit + 1);
      }
-@@ -2478,8 +2797,8 @@ class DefaultEntitiesCatalog {
+@@ -2478,8 +2802,8 @@ class DefaultEntitiesCatalog {
          hasNextPage: true,
          endCursor: stringifyPagination({
            limit,
@@ -2307,7 +2310,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        };
      }
      let entities = rows.map((e) => JSON.parse(e.final_entity));
-@@ -2490,7 +2809,9 @@ class DefaultEntitiesCatalog {
+@@ -2490,7 +2814,9 @@ class DefaultEntitiesCatalog {
        if (entity.relations) {
          for (const relation of entity.relations) {
            if (!relation.targetRef && relation.target) {
@@ -2318,7 +2321,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            } else if (!relation.target && relation.targetRef) {
              relation.target = catalogModel.parseEntityRef(relation.targetRef);
            }
-@@ -2499,20 +2820,23 @@ class DefaultEntitiesCatalog {
+@@ -2499,20 +2825,23 @@ class DefaultEntitiesCatalog {
      }
      return {
        entities,
@@ -2351,7 +2354,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        if (request == null ? void 0 : request.filter) {
          query = parseFilter(
            request.filter,
-@@ -2542,7 +2866,7 @@ class DefaultEntitiesCatalog {
+@@ -2542,7 +2871,7 @@ class DefaultEntitiesCatalog {
      const cursor = {
        orderFields: [defaultSortField],
        isPrevious: false,
@@ -2360,7 +2363,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      };
      const isFetchingBackwards = cursor.isPrevious;
      if (cursor.orderFields.length > 1) {
-@@ -2550,28 +2874,43 @@ class DefaultEntitiesCatalog {
+@@ -2550,28 +2879,43 @@ class DefaultEntitiesCatalog {
      }
      const sortField = {
        ...defaultSortField,
@@ -2416,7 +2419,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          dbQuery.andWhere("search.entity_id", "in", matchQuery);
        }
      }
-@@ -2583,23 +2922,31 @@ class DefaultEntitiesCatalog {
+@@ -2583,23 +2927,31 @@ class DefaultEntitiesCatalog {
            "value",
            isFetchingBackwards !== isOrderingDescending ? "<" : ">",
            prevItemOrderFieldValue
@@ -2463,7 +2466,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      countQuery.count("search.entity_id", { as: "count" });
      const [rows, [{ count }]] = await Promise.all([
        limit > 0 ? dbQuery : [],
-@@ -2607,13 +2954,16 @@ class DefaultEntitiesCatalog {
+@@ -2607,13 +2959,16 @@ class DefaultEntitiesCatalog {
        // only on the first request.
        // The result is then embedded into the cursor
        // for subsequent requests.
@@ -2482,7 +2485,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      if (rows.length > limit) {
        rows.length -= 1;
      }
-@@ -2622,81 +2972,114 @@ class DefaultEntitiesCatalog {
+@@ -2622,81 +2977,114 @@ class DefaultEntitiesCatalog {
      const lastRow = rows[rows.length - 1];
      const firstSortFieldValues = cursor.firstSortFieldValues || [
        firstRow == null ? void 0 : firstRow.value,
@@ -2655,7 +2658,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      if (!rootRow) {
        throw new errors.NotFoundError(`No such entity ${rootRef}`);
      }
-@@ -2707,16 +3090,19 @@ class DefaultEntitiesCatalog {
+@@ -2707,16 +3095,19 @@ class DefaultEntitiesCatalog {
      for (let current = rootEntity; current; current = todo.pop()) {
        const currentRef = catalogModel.stringifyEntityRef(current);
        seenEntityRefs.add(currentRef);
@@ -2685,7 +2688,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        const parentRefs = [];
        for (const { parentEntityRef, parentEntityJson } of parentRows) {
          parentRefs.push(parentEntityRef);
-@@ -2727,36 +3113,44 @@ class DefaultEntitiesCatalog {
+@@ -2727,36 +3118,44 @@ class DefaultEntitiesCatalog {
        }
        items.push({
          entity: current,
@@ -2739,7 +2742,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  );
  zod.z.object({
    orderFields: zod.z.array(
-@@ -2767,14 +3161,14 @@ zod.z.object({
+@@ -2767,14 +3166,14 @@ zod.z.object({
    isPrevious: zod.z.boolean(),
    query: zod.z.string().optional(),
    firstSortFieldValues: zod.z.array(zod.z.string().or(zod.z.null())).optional(),
@@ -2756,7 +2759,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      } = request;
      return { filter, orderFields: sortFields, fullTextFilter };
    }
-@@ -2791,7 +3185,15 @@ function sortFieldsFromRow(row) {
+@@ -2791,7 +3190,15 @@ function sortFieldsFromRow(row) {
  }
  
  var __defProp$6 = Object.defineProperty;
@@ -2773,7 +2776,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  var __publicField$6 = (obj, key, value) => {
    __defNormalProp$6(obj, typeof key !== "symbol" ? key + "" : key, value);
    return value;
-@@ -2811,7 +3213,7 @@ class ProcessorOutputCollector {
+@@ -2811,7 +3218,7 @@ class ProcessorOutputCollector {
    }
    forProcessor(processor) {
      const logger = this.logger.child({
@@ -2782,7 +2785,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
      return (i) => this.receive(logger, i);
    }
-@@ -2821,13 +3223,17 @@ class ProcessorOutputCollector {
+@@ -2821,13 +3228,17 @@ class ProcessorOutputCollector {
        errors: this.errors,
        relations: this.relations,
        refreshKeys: this.refreshKeys,
@@ -2802,7 +2805,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        );
        return;
      }
-@@ -2859,16 +3265,16 @@ class ProcessorOutputCollector {
+@@ -2859,16 +3270,16 @@ class ProcessorOutputCollector {
              annotations: {
                ...annotations,
                [catalogModel.ANNOTATION_ORIGIN_LOCATION]: originLocation,
@@ -2823,7 +2826,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
        const locationKey = getEntityLocationRef(entity);
        this.deferredEntities.push({ entity, locationKey });
-@@ -2883,7 +3289,15 @@ class ProcessorOutputCollector {
+@@ -2883,7 +3294,15 @@ class ProcessorOutputCollector {
  }
  
  var __defProp$5 = Object.defineProperty;
@@ -2840,7 +2843,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  var __publicField$5 = (obj, key, value) => {
    __defNormalProp$5(obj, typeof key !== "symbol" ? key + "" : key, value);
    return value;
-@@ -3012,9 +3426,11 @@ class DefaultCatalogProcessingOrchestrator {
+@@ -3012,9 +3431,11 @@ class DefaultCatalogProcessingOrchestrator {
        const context = {
          entityRef: catalogModel.stringifyEntityRef(entity),
          location: catalogModel.parseLocationRef(getEntityLocationRef(entity)),
@@ -2854,7 +2857,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        };
        entity = await this.runPreProcessStep(entity, context);
        entity = await this.runPolicyStep(entity);
-@@ -3025,10 +3441,12 @@ class DefaultCatalogProcessingOrchestrator {
+@@ -3025,10 +3446,12 @@ class DefaultCatalogProcessingOrchestrator {
        entity = await this.runPostProcessStep(entity, context);
        const collectorResults = context.collector.results();
        for (const deferredEntity of collectorResults.deferredEntities) {
@@ -2871,7 +2874,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            throw new errors.NotAllowedError(
              `Entity ${catalogModel.stringifyEntityRef(
                deferredEntity.entity
-@@ -3044,246 +3462,283 @@ class DefaultCatalogProcessingOrchestrator {
+@@ -3044,246 +3467,283 @@ class DefaultCatalogProcessingOrchestrator {
          ...collectorResults,
          completedEntity: entity,
          state: { cache: cache.collect() },
@@ -3340,7 +3343,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    }
  }
  
-@@ -3297,20 +3752,28 @@ async function getDeferredStitchableEntities(options) {
+@@ -3297,20 +3757,28 @@ async function getDeferredStitchableEntities(options) {
    if (["mysql", "mysql2", "pg"].includes(knex.client.config.client)) {
      itemsQuery = itemsQuery.forUpdate().skipLocked();
    }
@@ -3377,7 +3380,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    }));
  }
  function nowPlus(knex, duration) {
-@@ -3330,7 +3793,7 @@ const SPECIAL_KEYS = [
+@@ -3330,7 +3798,7 @@ const SPECIAL_KEYS = [
    "metadata.name",
    "metadata.namespace",
    "metadata.uid",
@@ -3386,7 +3389,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  ];
  const MAX_KEY_LENGTH = 200;
  const MAX_VALUE_LENGTH = 200;
-@@ -3340,7 +3803,11 @@ function traverse(root) {
+@@ -3340,7 +3808,11 @@ function traverse(root) {
      if (SPECIAL_KEYS.includes(path)) {
        return;
      }
@@ -3399,7 +3402,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        output.push({ key: path, value: current });
        return;
      }
-@@ -3375,7 +3842,7 @@ function mapToRows(input, entityId) {
+@@ -3375,7 +3847,7 @@ function mapToRows(input, entityId) {
          entity_id: entityId,
          key,
          original_value: null,
@@ -3408,7 +3411,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
      } else {
        const value = String(rawValue).toLocaleLowerCase("en-US");
-@@ -3384,14 +3851,14 @@ function mapToRows(input, entityId) {
+@@ -3384,14 +3856,14 @@ function mapToRows(input, entityId) {
            entity_id: entityId,
            key,
            original_value: String(rawValue),
@@ -3425,7 +3428,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          });
        }
      }
-@@ -3405,12 +3872,15 @@ function buildEntitySearch(entityId, entity) {
+@@ -3405,12 +3877,15 @@ function buildEntitySearch(entityId, entity) {
    raw.push({ key: "metadata.namespace", value: entity.metadata.namespace });
    raw.push({ key: "metadata.uid", value: entity.metadata.uid });
    if (!entity.metadata.namespace) {
@@ -3443,7 +3446,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
    }
    const keys = new Set(raw.map((r) => r.key));
-@@ -3433,50 +3903,75 @@ function buildEntitySearch(entityId, entity) {
+@@ -3433,50 +3908,75 @@ function buildEntitySearch(entityId, entity) {
  
  async function markDeferredStitchCompleted(option) {
    const { knex, entityRef, stitchTicket } = option;
@@ -3548,7 +3551,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    ]);
    if (!processedResult.length) {
      logger.debug(
-@@ -3489,7 +3984,7 @@ async function performStitching(options) {
+@@ -3489,7 +3989,7 @@ async function performStitching(options) {
      processedEntity,
      errors,
      incomingReferenceCount,
@@ -3557,7 +3560,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    } = processedResult[0];
    if (!processedEntity) {
      logger.debug(
-@@ -3504,7 +3999,7 @@ async function performStitching(options) {
+@@ -3504,7 +4004,7 @@ async function performStitching(options) {
      logger.debug(`${entityRef} is an orphan`);
      entity.metadata.annotations = {
        ...entity.metadata.annotations,
@@ -3566,7 +3569,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      };
    }
    if (errors) {
-@@ -3514,27 +4009,39 @@ async function performStitching(options) {
+@@ -3514,27 +4014,39 @@ async function performStitching(options) {
          type: catalogClient.ENTITY_STATUS_CATALOG_PROCESSING_TYPE,
          level: "error",
          message: `${e.name}: ${e.message}`,
@@ -3618,7 +3621,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      };
    }
    const hash = generateStableHash(entity);
-@@ -3547,16 +4054,21 @@ async function performStitching(options) {
+@@ -3547,16 +4059,21 @@ async function performStitching(options) {
      entity.metadata.etag = hash;
    }
    const searchEntries = buildEntitySearch(entityId, entity);
@@ -3646,7 +3649,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
    }
    if (amountOfRowsChanged === 0) {
-@@ -3571,20 +4083,20 @@ async function performStitching(options) {
+@@ -3571,20 +4088,20 @@ async function performStitching(options) {
  function progressTracker(knex, logger) {
    const promStitchedEntities = createCounterMetric({
      name: "catalog_stitched_entities_count",
@@ -3670,7 +3673,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      }
    );
    const stitchingQueueCount = meter.createObservableGauge(
-@@ -3592,14 +4104,18 @@ function progressTracker(knex, logger) {
+@@ -3592,14 +4109,18 @@ function progressTracker(knex, logger) {
      { description: "Number of entities currently in the stitching queue" }
    );
    stitchingQueueCount.addCallback(async (result) => {
@@ -3692,7 +3695,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      }
    );
    function stitchStart(item) {
-@@ -3629,21 +4145,28 @@ function progressTracker(knex, logger) {
+@@ -3629,21 +4150,28 @@ function progressTracker(knex, logger) {
      }
      return {
        markComplete,
@@ -3725,7 +3728,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  };
  var __privateAdd = (obj, member, value) => {
    if (member.has(obj))
-@@ -3673,7 +4196,7 @@ const _DefaultStitcher = class _DefaultStitcher {
+@@ -3673,7 +4201,7 @@ const _DefaultStitcher = class _DefaultStitcher {
      return new _DefaultStitcher({
        knex: options.knex,
        logger: options.logger,
@@ -3734,7 +3737,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
    }
    async stitch(options) {
-@@ -3683,13 +4206,15 @@ const _DefaultStitcher = class _DefaultStitcher {
+@@ -3683,13 +4211,15 @@ const _DefaultStitcher = class _DefaultStitcher {
          knex: this.knex,
          strategy: this.strategy,
          entityRefs,
@@ -3752,7 +3755,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        }
      }
      if (entityIds) {
-@@ -3698,9 +4223,13 @@ const _DefaultStitcher = class _DefaultStitcher {
+@@ -3698,9 +4228,13 @@ const _DefaultStitcher = class _DefaultStitcher {
          100
        );
        for (const chunk of chunks) {
@@ -3768,7 +3771,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          }
        }
      }
-@@ -3716,15 +4245,22 @@ const _DefaultStitcher = class _DefaultStitcher {
+@@ -3716,15 +4250,22 @@ const _DefaultStitcher = class _DefaultStitcher {
          highWatermark: 5,
          pollingIntervalMs: types.durationToMilliseconds(pollingInterval),
          loadTasks: async (count) => {
@@ -3798,7 +3801,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
        this.stopFunc = () => {
          stopPipeline();
-@@ -3741,12 +4277,12 @@ const _DefaultStitcher = class _DefaultStitcher {
+@@ -3741,12 +4282,12 @@ const _DefaultStitcher = class _DefaultStitcher {
    }
  };
  _getStitchableEntities = new WeakSet();
@@ -3813,7 +3816,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
    } catch (error) {
      this.logger.warn("Failed to load stitchable entities", error);
-@@ -3754,10 +4290,10 @@ getStitchableEntities_fn = async function(count, stitchTimeout) {
+@@ -3754,10 +4295,10 @@ getStitchableEntities_fn = async function(count, stitchTimeout) {
    }
  };
  _stitchOne = new WeakSet();
@@ -3826,7 +3829,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    });
    try {
      const result = await performStitching({
-@@ -3765,7 +4301,7 @@ stitchOne_fn = async function(options) {
+@@ -3765,7 +4306,7 @@ stitchOne_fn = async function(options) {
        logger: this.logger,
        strategy: this.strategy,
        entityRef: options.entityRef,
@@ -3835,7 +3838,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
      track.markComplete(result);
    } catch (error) {
-@@ -3776,7 +4312,7 @@ let DefaultStitcher = _DefaultStitcher;
+@@ -3776,7 +4317,7 @@ let DefaultStitcher = _DefaultStitcher;
  
  const schema = zod.z.object({
    entityRefs: zod.z.array(zod.z.string()),
@@ -3844,7 +3847,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  });
  function entitiesBatchRequest(req) {
    try {
-@@ -3792,7 +4328,10 @@ function basicEntityFilter(items) {
+@@ -3792,7 +4333,10 @@ function basicEntityFilter(items) {
    const filtersByKey = {};
    for (const [key, value] of Object.entries(items)) {
      const values = [value].flat();
@@ -3856,7 +3859,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      f.values.push(...values);
    }
    return { anyOf: [{ allOf: Object.values(filtersByKey) }] };
-@@ -3821,21 +4360,29 @@ function parseEntityFilterParams(params) {
+@@ -3821,21 +4365,29 @@ function parseEntityFilterParams(params) {
    return { anyOf: filters.map((f) => ({ allOf: f })) };
  }
  function parseEntityFilterString(filterString) {
@@ -3890,7 +3893,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      if (value !== void 0) {
        f.values = f.values || [];
        f.values.push(value);
-@@ -3863,7 +4410,18 @@ function parseEntityTransformParams(params, extra) {
+@@ -3863,7 +4415,18 @@ function parseEntityTransformParams(params, extra) {
    const queryFields = parseStringsParam(params.fields, "fields");
    const fields = Array.from(
      new Set(
@@ -3910,7 +3913,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      )
    );
    if (!fields.length) {
-@@ -3895,7 +4453,9 @@ function parseEntityOrderFieldParams(params) {
+@@ -3895,7 +4458,9 @@ function parseEntityOrderFieldParams(params) {
    return orderFieldStrings.map((orderFieldString) => {
      const [field, order] = orderFieldString.split(",");
      if (order !== void 0 && !isOrder(order)) {
@@ -3921,7 +3924,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      }
      return { field, order };
    });
-@@ -3910,7 +4470,7 @@ function parseQueryEntitiesParams(params) {
+@@ -3910,7 +4475,7 @@ function parseQueryEntitiesParams(params) {
      const decodedCursor = decodeCursor(params.cursor);
      const response2 = {
        cursor: decodedCursor,
@@ -3930,7 +3933,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      };
      return response2;
    }
-@@ -3922,8 +4482,8 @@ function parseQueryEntitiesParams(params) {
+@@ -3922,8 +4487,8 @@ function parseQueryEntitiesParams(params) {
      orderFields,
      fullTextFilter: {
        term: params.fullTextFilterTerm || "",
@@ -3941,7 +3944,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    };
    return response;
  }
-@@ -3941,18 +4501,20 @@ function parseEntityFacetParams(params) {
+@@ -3941,18 +4506,20 @@ function parseEntityFacetParams(params) {
  
  function parseEntityOrderParams(params) {
    var _a;
@@ -3974,7 +3977,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  }
  
  const spec = {
-@@ -3960,17 +4522,18 @@ const spec = {
+@@ -3960,17 +4527,18 @@ const spec = {
    info: {
      title: "catalog",
      version: "1",
@@ -3998,7 +4001,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    ],
    components: {
      examples: {},
-@@ -3982,8 +4545,8 @@ const spec = {
+@@ -3982,8 +4550,8 @@ const spec = {
          required: true,
          allowReserved: true,
          schema: {
@@ -4009,7 +4012,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        namespace: {
          name: "namespace",
-@@ -3991,8 +4554,8 @@ const spec = {
+@@ -3991,8 +4559,8 @@ const spec = {
          required: true,
          allowReserved: true,
          schema: {
@@ -4020,7 +4023,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        name: {
          name: "name",
-@@ -4000,8 +4563,8 @@ const spec = {
+@@ -4000,8 +4568,8 @@ const spec = {
          required: true,
          allowReserved: true,
          schema: {
@@ -4031,7 +4034,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        uid: {
          name: "uid",
-@@ -4009,8 +4572,8 @@ const spec = {
+@@ -4009,8 +4577,8 @@ const spec = {
          required: true,
          allowReserved: true,
          schema: {
@@ -4042,7 +4045,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        cursor: {
          name: "cursor",
-@@ -4020,8 +4583,8 @@ const spec = {
+@@ -4020,8 +4588,8 @@ const spec = {
          allowReserved: true,
          schema: {
            type: "string",
@@ -4053,7 +4056,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        after: {
          name: "after",
-@@ -4031,8 +4594,8 @@ const spec = {
+@@ -4031,8 +4599,8 @@ const spec = {
          allowReserved: true,
          schema: {
            type: "string",
@@ -4064,7 +4067,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        fields: {
          name: "fields",
-@@ -4044,17 +4607,17 @@ const spec = {
+@@ -4044,17 +4612,17 @@ const spec = {
          schema: {
            type: "array",
            items: {
@@ -4088,7 +4091,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        filter: {
          name: "filter",
-@@ -4065,19 +4628,19 @@ const spec = {
+@@ -4065,19 +4633,19 @@ const spec = {
          schema: {
            type: "array",
            items: {
@@ -4115,7 +4118,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        offset: {
          name: "offset",
-@@ -4087,8 +4650,8 @@ const spec = {
+@@ -4087,8 +4655,8 @@ const spec = {
          allowReserved: true,
          schema: {
            type: "integer",
@@ -4126,7 +4129,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        limit: {
          name: "limit",
-@@ -4098,8 +4661,8 @@ const spec = {
+@@ -4098,8 +4666,8 @@ const spec = {
          allowReserved: true,
          schema: {
            type: "integer",
@@ -4137,7 +4140,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        orderField: {
          name: "orderField",
-@@ -4111,20 +4674,20 @@ const spec = {
+@@ -4111,21 +4679,21 @@ const spec = {
            type: "array",
            items: {
              type: "string",
@@ -4158,14 +4161,16 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
 -          }
 -        }
 -      }
+-    },
 +            value: ["spec.owner,desc"],
 +          },
 +        },
 +      },
-     },
++    },
      requestBodies: {},
      responses: {
-@@ -4133,11 +4696,11 @@ const spec = {
+       ErrorResponse: {
+@@ -4133,11 +4701,11 @@ const spec = {
          content: {
            "application/json": {
              schema: {
@@ -4182,7 +4187,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      },
      schemas: {
        Error: {
-@@ -4147,82 +4710,85 @@ const spec = {
+@@ -4147,82 +4715,85 @@ const spec = {
              type: "object",
              properties: {
                name: {
@@ -4293,7 +4298,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        EntityMeta: {
          type: "object",
-@@ -4230,67 +4796,74 @@ const spec = {
+@@ -4230,67 +4801,74 @@ const spec = {
            links: {
              type: "array",
              items: {
@@ -4387,7 +4392,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        Entity: {
          type: "object",
-@@ -4298,27 +4871,30 @@ const spec = {
+@@ -4298,27 +4876,30 @@ const spec = {
            relations: {
              type: "array",
              items: {
@@ -4426,7 +4431,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        NullableEntity: {
          type: "object",
-@@ -4326,28 +4902,31 @@ const spec = {
+@@ -4326,28 +4907,31 @@ const spec = {
            relations: {
              type: "array",
              items: {
@@ -4467,7 +4472,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        EntityAncestryResponse: {
          type: "object",
-@@ -4359,23 +4938,23 @@ const spec = {
+@@ -4359,23 +4943,23 @@ const spec = {
                properties: {
                  parentEntityRefs: {
                    items: {
@@ -4500,7 +4505,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        EntitiesBatchResponse: {
          type: "object",
-@@ -4383,26 +4962,27 @@ const spec = {
+@@ -4383,26 +4967,27 @@ const spec = {
            items: {
              type: "array",
              items: {
@@ -4536,7 +4541,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        EntityFacetsResponse: {
          type: "object",
-@@ -4412,81 +4992,83 @@ const spec = {
+@@ -4412,81 +4997,83 @@ const spec = {
              additionalProperties: {
                type: "array",
                items: {
@@ -4646,7 +4651,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            },
            {
              type: "object",
-@@ -4494,108 +5076,121 @@ const spec = {
+@@ -4494,108 +5081,121 @@ const spec = {
                links: {
                  type: "array",
                  items: {
@@ -4799,7 +4804,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        AnalyzeLocationGenerateEntity: {
          type: "object",
-@@ -4603,48 +5198,49 @@ const spec = {
+@@ -4603,48 +5203,49 @@ const spec = {
            fields: {
              type: "array",
              items: {
@@ -4865,7 +4870,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        },
        EntitiesQueryResponse: {
          type: "object",
-@@ -4652,38 +5248,38 @@ const spec = {
+@@ -4652,38 +5253,38 @@ const spec = {
            items: {
              type: "array",
              items: {
@@ -4917,7 +4922,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    },
    paths: {
      "/refresh": {
-@@ -4691,21 +5287,21 @@ const spec = {
+@@ -4691,21 +5292,21 @@ const spec = {
          operationId: "RefreshEntity",
          description: "Refresh the entity related to entityRef.",
          responses: {
@@ -4947,7 +4952,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          parameters: [],
          requestBody: {
-@@ -4716,68 +5312,70 @@ const spec = {
+@@ -4716,68 +5317,70 @@ const spec = {
                  type: "object",
                  properties: {
                    authorizationToken: {
@@ -5045,7 +5050,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            },
            {
              name: "order",
-@@ -4787,183 +5385,184 @@ const spec = {
+@@ -4787,183 +5390,184 @@ const spec = {
              schema: {
                type: "array",
                items: {
@@ -5308,7 +5313,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          requestBody: {
            required: false,
-@@ -4976,86 +5575,86 @@ const spec = {
+@@ -4976,86 +5580,86 @@ const spec = {
                    entityRefs: {
                      type: "array",
                      items: {
@@ -5430,7 +5435,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            },
            {
              name: "fullTextFilterTerm",
-@@ -5064,54 +5663,55 @@ const spec = {
+@@ -5064,54 +5668,55 @@ const spec = {
              required: false,
              allowReserved: true,
              schema: {
@@ -5506,7 +5511,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          parameters: [
            {
-@@ -5122,30 +5722,30 @@ const spec = {
+@@ -5122,30 +5727,30 @@ const spec = {
              schema: {
                type: "array",
                items: {
@@ -5548,7 +5553,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              description: "Created",
              content: {
                "application/json": {
-@@ -5153,35 +5753,35 @@ const spec = {
+@@ -5153,35 +5758,35 @@ const spec = {
                    type: "object",
                    properties: {
                      exists: {
@@ -5599,7 +5604,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          parameters: [
            {
-@@ -5190,9 +5790,9 @@ const spec = {
+@@ -5190,9 +5795,9 @@ const spec = {
              required: false,
              allowReserved: true,
              schema: {
@@ -5612,7 +5617,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          requestBody: {
            required: true,
-@@ -5202,23 +5802,23 @@ const spec = {
+@@ -5202,23 +5807,23 @@ const spec = {
                  type: "object",
                  properties: {
                    target: {
@@ -5645,7 +5650,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              description: "Ok",
              content: {
                "application/json": {
-@@ -5228,52 +5828,52 @@ const spec = {
+@@ -5228,52 +5833,52 @@ const spec = {
                      type: "object",
                      properties: {
                        data: {
@@ -5720,7 +5725,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          parameters: [
            {
-@@ -5282,30 +5882,30 @@ const spec = {
+@@ -5282,30 +5887,30 @@ const spec = {
              required: true,
              allowReserved: true,
              schema: {
@@ -5763,7 +5768,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          parameters: [
            {
-@@ -5314,36 +5914,36 @@ const spec = {
+@@ -5314,36 +5919,36 @@ const spec = {
              required: true,
              allowReserved: true,
              schema: {
@@ -5814,7 +5819,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          parameters: [
            {
-@@ -5352,8 +5952,8 @@ const spec = {
+@@ -5352,8 +5957,8 @@ const spec = {
              required: true,
              allowReserved: true,
              schema: {
@@ -5825,7 +5830,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            },
            {
              in: "path",
-@@ -5361,8 +5961,8 @@ const spec = {
+@@ -5361,8 +5966,8 @@ const spec = {
              required: true,
              allowReserved: true,
              schema: {
@@ -5836,7 +5841,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            },
            {
              in: "path",
-@@ -5370,39 +5970,39 @@ const spec = {
+@@ -5370,39 +5975,39 @@ const spec = {
              required: true,
              allowReserved: true,
              schema: {
@@ -5892,7 +5897,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          parameters: [],
          requestBody: {
-@@ -5413,28 +6013,29 @@ const spec = {
+@@ -5413,28 +6018,29 @@ const spec = {
                  type: "object",
                  properties: {
                    catalogFileName: {
@@ -5935,7 +5940,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              description: "Validation errors.",
              content: {
                "application/json": {
-@@ -5447,28 +6048,28 @@ const spec = {
+@@ -5447,28 +6053,28 @@ const spec = {
                          type: "object",
                          properties: {
                            name: {
@@ -5977,7 +5982,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ],
          parameters: [],
          requestBody: {
-@@ -5479,29 +6080,26 @@ const spec = {
+@@ -5479,29 +6085,26 @@ const spec = {
                  type: "object",
                  properties: {
                    location: {
@@ -6021,7 +6026,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    if (offset === void 0 && limit === void 0 && after === void 0) {
      return void 0;
    }
-@@ -5515,9 +6113,9 @@ function parseEntityPaginationParams({
+@@ -5515,9 +6118,9 @@ function parseEntityPaginationParams({
      throw new errors.InputError(`Invalid after, must not be empty`);
    }
    return {
@@ -6034,7 +6039,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    };
  }
  
-@@ -5526,8 +6124,8 @@ async function createRouter(options) {
+@@ -5526,8 +6129,8 @@ async function createRouter(options) {
      validatorOptions: {
        // We want the spec to be up to date with the expected value, but the return type needs
        //  to be controlled by the router implementation not the request validator.
@@ -6045,7 +6050,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    });
    const {
      entitiesCatalog,
-@@ -5539,19 +6137,22 @@ async function createRouter(options) {
+@@ -5539,19 +6142,22 @@ async function createRouter(options) {
      logger,
      permissionIntegrationRouter,
      auth,
@@ -6072,7 +6077,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
        res.status(200).end();
      });
-@@ -5560,136 +6161,156 @@ async function createRouter(options) {
+@@ -5560,136 +6166,156 @@ async function createRouter(options) {
      router.use(permissionIntegrationRouter);
    }
    if (entitiesCatalog) {
@@ -6349,7 +6354,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    }
    if (locationAnalyzer) {
      router.post("/analyze-location", async (req, res) => {
-@@ -5697,12 +6318,12 @@ async function createRouter(options) {
+@@ -5697,12 +6323,12 @@ async function createRouter(options) {
          req,
          zod.z.object({
            location: locationInput,
@@ -6364,7 +6369,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
        const parsedBody = schema.parse(body);
        try {
-@@ -5711,7 +6332,8 @@ async function createRouter(options) {
+@@ -5711,7 +6337,8 @@ async function createRouter(options) {
        } catch (err) {
          if (
            // Catch errors from parse-url library.
@@ -6374,7 +6379,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          ) {
            throw new errors.InputError("The given location.target is not a URL");
          }
-@@ -5723,7 +6345,7 @@ async function createRouter(options) {
+@@ -5723,7 +6350,7 @@ async function createRouter(options) {
      router.post("/validate-entity", async (req, res) => {
        const bodySchema = zod.z.object({
          entity: zod.z.unknown(),
@@ -6383,7 +6388,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
        let body;
        let entity;
-@@ -5738,7 +6360,7 @@ async function createRouter(options) {
+@@ -5738,7 +6365,7 @@ async function createRouter(options) {
            );
        } catch (err) {
          return res.status(400).json({
@@ -6392,7 +6397,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          });
        }
        const processingResult = await orchestrator.process({
-@@ -5749,14 +6371,14 @@ async function createRouter(options) {
+@@ -5749,14 +6376,14 @@ async function createRouter(options) {
              annotations: {
                [catalogModel.ANNOTATION_LOCATION]: body.location,
                [catalogModel.ANNOTATION_ORIGIN_LOCATION]: body.location,
@@ -6412,7 +6417,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          });
        return res.status(200).end();
      });
-@@ -5766,9 +6388,17 @@ async function createRouter(options) {
+@@ -5766,9 +6393,17 @@ async function createRouter(options) {
  }
  
  var __defProp$3 = Object.defineProperty;
@@ -6432,7 +6437,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    return value;
  };
  class DefaultRefreshService {
-@@ -5779,18 +6409,18 @@ class DefaultRefreshService {
+@@ -5779,18 +6414,18 @@ class DefaultRefreshService {
    async refresh(options) {
      await this.database.transaction(async (tx) => {
        const { entityRefs } = await this.database.listAncestors(tx, {
@@ -6456,7 +6461,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
      });
    }
-@@ -5802,16 +6432,20 @@ class AuthorizedRefreshService {
+@@ -5802,16 +6437,20 @@ class AuthorizedRefreshService {
      this.permissionApi = permissionApi;
    }
    async refresh(options) {
@@ -6487,7 +6492,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        throw new errors.NotAllowedError();
      }
      await this.service.refresh(options);
-@@ -5819,9 +6453,17 @@ class AuthorizedRefreshService {
+@@ -5819,9 +6458,17 @@ class AuthorizedRefreshService {
  }
  
  var __defProp$2 = Object.defineProperty;
@@ -6507,7 +6512,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    return value;
  };
  const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
-@@ -5869,41 +6511,48 @@ const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
+@@ -5869,41 +6516,48 @@ const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
    static fromConfig(config) {
      const rules = new Array();
      if (config.has("catalog.rules")) {
@@ -6586,7 +6591,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        rules.push(...locationRules);
      }
      return new _DefaultCatalogRulesEnforcer(rules);
-@@ -5931,13 +6580,23 @@ const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
+@@ -5931,13 +6585,23 @@ const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
        if (matcher.type !== (location == null ? void 0 : location.type)) {
          continue;
        }
@@ -6615,7 +6620,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          continue;
        }
        return true;
-@@ -5950,7 +6609,11 @@ const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
+@@ -5950,7 +6614,11 @@ const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
        return true;
      }
      for (const matcher of matchers) {
@@ -6628,7 +6633,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          continue;
        }
        return true;
-@@ -5965,8 +6628,8 @@ const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
+@@ -5965,8 +6633,8 @@ const _DefaultCatalogRulesEnforcer = class _DefaultCatalogRulesEnforcer {
   */
  __publicField$2(_DefaultCatalogRulesEnforcer, "defaultRules", [
    {
@@ -6639,7 +6644,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  ]);
  let DefaultCatalogRulesEnforcer = _DefaultCatalogRulesEnforcer;
  function resolveTarget(type, target) {
-@@ -5977,15 +6640,27 @@ function resolveTarget(type, target) {
+@@ -5977,15 +6645,27 @@ function resolveTarget(type, target) {
  }
  
  var __defProp$1 = Object.defineProperty;
@@ -6670,7 +6675,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
    }
    async applyMutation(mutation) {
      const db = this.config.providerDatabase;
-@@ -5995,25 +6670,29 @@ class Connection {
+@@ -5995,25 +6675,29 @@ class Connection {
          await db.replaceUnprocessedEntities(tx, {
            sourceKey: this.config.id,
            type: "full",
@@ -6708,7 +6713,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          });
        });
      }
-@@ -6022,7 +6701,7 @@ class Connection {
+@@ -6022,7 +6706,7 @@ class Connection {
      const db = this.config.providerDatabase;
      await db.transaction(async (tx) => {
        return db.refreshByRefreshKeys(tx, {
@@ -6717,7 +6722,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
      });
    }
-@@ -6041,14 +6720,15 @@ async function connectEntityProviders(db, providers) {
+@@ -6041,14 +6725,15 @@ async function connectEntityProviders(db, providers) {
      providers.map(async (provider) => {
        const connection = new Connection({
          id: provider.getProviderName(),
@@ -6735,7 +6740,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  
  const hasAnnotation = createCatalogPermissionRule({
    name: "HAS_ANNOTATION",
-@@ -6056,18 +6736,33 @@ const hasAnnotation = createCatalogPermissionRule({
+@@ -6056,18 +6741,33 @@ const hasAnnotation = createCatalogPermissionRule({
    resourceType: alpha.RESOURCE_TYPE_CATALOG_ENTITY,
    paramsSchema: zod.z.object({
      annotation: zod.z.string().describe("Name of the annotation to match on"),
@@ -6777,7 +6782,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  });
  
  const isEntityKind = createCatalogPermissionRule({
-@@ -6075,18 +6770,22 @@ const isEntityKind = createCatalogPermissionRule({
+@@ -6075,18 +6775,22 @@ const isEntityKind = createCatalogPermissionRule({
    description: "Allow entities matching a specified kind",
    resourceType: alpha.RESOURCE_TYPE_CATALOG_ENTITY,
    paramsSchema: zod.z.object({
@@ -6804,7 +6809,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  });
  
  const isEntityOwner = createCatalogPermissionRule({
-@@ -6094,20 +6793,24 @@ const isEntityOwner = createCatalogPermissionRule({
+@@ -6094,20 +6798,24 @@ const isEntityOwner = createCatalogPermissionRule({
    description: "Allow entities owned by a specified claim",
    resourceType: alpha.RESOURCE_TYPE_CATALOG_ENTITY,
    paramsSchema: zod.z.object({
@@ -6835,7 +6840,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  });
  
  const hasLabel = createCatalogPermissionRule({
-@@ -6115,43 +6818,51 @@ const hasLabel = createCatalogPermissionRule({
+@@ -6115,43 +6823,51 @@ const hasLabel = createCatalogPermissionRule({
    description: "Allow entities with the specified label",
    resourceType: alpha.RESOURCE_TYPE_CATALOG_ENTITY,
    paramsSchema: zod.z.object({
@@ -6915,7 +6920,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  
  const hasMetadata = createPropertyRule("metadata");
  
-@@ -6163,7 +6874,7 @@ const permissionRules = {
+@@ -6163,7 +6879,7 @@ const permissionRules = {
    hasMetadata,
    hasSpec,
    isEntityKind,
@@ -6924,7 +6929,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  };
  
  class AuthorizedEntitiesCatalog {
-@@ -6173,61 +6884,86 @@ class AuthorizedEntitiesCatalog {
+@@ -6173,61 +6889,86 @@ class AuthorizedEntitiesCatalog {
      this.transformConditions = transformConditions;
    }
    async entities(request) {
@@ -7034,7 +7039,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        const permissionFilter = this.transformConditions(
          authorizeDecision.conditions
        );
-@@ -6239,13 +6975,17 @@ class AuthorizedEntitiesCatalog {
+@@ -6239,13 +6980,17 @@ class AuthorizedEntitiesCatalog {
            ...request,
            cursor: {
              ...request.cursor,
@@ -7055,7 +7060,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          };
          requestFilter = request.filter;
        }
-@@ -6254,54 +6994,71 @@ class AuthorizedEntitiesCatalog {
+@@ -6254,54 +6999,71 @@ class AuthorizedEntitiesCatalog {
        );
        const prevCursor = response.pageInfo.prevCursor && {
          ...response.pageInfo.prevCursor,
@@ -7145,7 +7150,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        throw new errors.NotAllowedError();
      }
      const ancestryResult = await this.entitiesCatalog.entityAncestry(
-@@ -6311,12 +7068,14 @@ class AuthorizedEntitiesCatalog {
+@@ -6311,12 +7073,14 @@ class AuthorizedEntitiesCatalog {
      const authorizeResponse = await this.permissionApi.authorize(
        ancestryResult.items.map((item) => ({
          permission: alpha.catalogEntityReadPermission,
@@ -7162,7 +7167,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      );
      if (unauthorizedAncestryItems.length === 0) {
        return ancestryResult;
-@@ -6325,8 +7084,8 @@ class AuthorizedEntitiesCatalog {
+@@ -6325,8 +7089,8 @@ class AuthorizedEntitiesCatalog {
        (ancestryItem) => catalogModel.stringifyEntityRef(ancestryItem.entity)
      );
      const allUnauthorizedEntityRefs = new Set(
@@ -7173,7 +7178,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            rootEntityRef,
            ancestryResult.items,
            new Set(rootUnauthorizedEntityRefs)
-@@ -6336,48 +7095,60 @@ class AuthorizedEntitiesCatalog {
+@@ -6336,48 +7100,60 @@ class AuthorizedEntitiesCatalog {
      return {
        rootEntityRef: ancestryResult.rootEntityRef,
        items: ancestryResult.items.filter(
@@ -7254,7 +7259,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      ];
    }
  }
-@@ -6388,51 +7159,76 @@ class AuthorizedLocationService {
+@@ -6388,51 +7164,76 @@ class AuthorizedLocationService {
      this.permissionApi = permissionApi;
    }
    async createLocation(spec, dryRun, options) {
@@ -7356,7 +7361,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        throw new errors.NotFoundError();
      }
      return this.locationService.getLocationByEntity(entityRef, options);
-@@ -6443,26 +7239,36 @@ async function deleteWithEagerPruningOfChildren(options) {
+@@ -6443,26 +7244,36 @@ async function deleteWithEagerPruningOfChildren(options) {
    const { knex, entityRefs, sourceKey } = options;
    let removedCount = 0;
    for (const refs of lodash__default.default.chunk(entityRefs, 1e3)) {
@@ -7404,7 +7409,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      // First find all nodes that can be reached downwards from the roots
      // (deletion targets), including the roots themselves, by traversing
      // down the refresh_state_references table. Note that this query
-@@ -6486,79 +7292,120 @@ async function findDescendantsThatWouldHaveBeenOrphanedByDeletion(options) {
+@@ -6486,79 +7297,120 @@ async function findDescendantsThatWouldHaveBeenOrphanedByDeletion(options) {
      // down to also find R2 and R3. It uses union instead of union all,
      // because it wants to find the set of unique descendants even if
      // the tree has unexpected loops etc.
@@ -7585,7 +7590,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  }
  
  const BATCH_SIZE = 50;
-@@ -6575,7 +7422,7 @@ class DefaultProviderDatabase {
+@@ -6575,7 +7427,7 @@ class DefaultProviderDatabase {
          },
          {
            // If we explicitly trigger a rollback, don't fail.
@@ -7594,7 +7599,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          }
        );
        return result;
-@@ -6591,7 +7438,7 @@ class DefaultProviderDatabase {
+@@ -6591,7 +7443,7 @@ class DefaultProviderDatabase {
        const removedCount = await deleteWithEagerPruningOfChildren({
          knex: tx,
          entityRefs: toRemove,
@@ -7603,7 +7608,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        });
        this.options.logger.debug(
          `removed, ${removedCount} entities: ${JSON.stringify(toRemove)}`
-@@ -6610,7 +7457,7 @@ class DefaultProviderDatabase {
+@@ -6610,7 +7462,7 @@ class DefaultProviderDatabase {
                errors: "",
                location_key: item.deferred.locationKey,
                next_update_at: tx.fn.now(),
@@ -7612,7 +7617,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              })),
              BATCH_SIZE
            );
-@@ -6618,7 +7465,9 @@ class DefaultProviderDatabase {
+@@ -6618,7 +7470,9 @@ class DefaultProviderDatabase {
              "refresh_state_references",
              chunk.map((item) => ({
                source_key: options.sourceKey,
@@ -7623,7 +7628,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              })),
              BATCH_SIZE
            );
-@@ -6637,7 +7486,7 @@ class DefaultProviderDatabase {
+@@ -6637,7 +7491,7 @@ class DefaultProviderDatabase {
      if (toUpsert.length) {
        for (const {
          deferred: { entity, locationKey },
@@ -7632,7 +7637,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        } of toUpsert) {
          const entityRef = catalogModel.stringifyEntityRef(entity);
          try {
-@@ -6645,7 +7494,7 @@ class DefaultProviderDatabase {
+@@ -6645,7 +7499,7 @@ class DefaultProviderDatabase {
              tx,
              entity,
              hash,
@@ -7641,7 +7646,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            });
            if (!ok) {
              ok = await insertUnprocessedEntity({
-@@ -6653,22 +7502,23 @@ class DefaultProviderDatabase {
+@@ -6653,22 +7507,23 @@ class DefaultProviderDatabase {
                entity,
                hash,
                locationKey,
@@ -7672,7 +7677,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
              });
              if (conflictingKey) {
                this.options.logger.warn(
-@@ -6695,44 +7545,51 @@ class DefaultProviderDatabase {
+@@ -6695,44 +7550,51 @@ class DefaultProviderDatabase {
          toAdd: [],
          toUpsert: options.added.map((e) => ({
            deferred: e,
@@ -7740,7 +7745,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          toRemove.push(item.ref);
          toAdd.push(upsertItem);
        } else if (oldRef.oldEntityHash !== item.hash) {
-@@ -6757,7 +7614,7 @@ class DefaultCatalogDatabase {
+@@ -6757,7 +7619,7 @@ class DefaultCatalogDatabase {
          },
          {
            // If we explicitly trigger a rollback, don't fail.
@@ -7749,7 +7754,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          }
        );
        return result;
-@@ -6773,9 +7630,9 @@ class DefaultCatalogDatabase {
+@@ -6773,9 +7635,9 @@ class DefaultCatalogDatabase {
      const entityRefs = new Array();
      let currentRef = entityRef.toLocaleLowerCase("en-US");
      for (let depth = 1; depth <= MAX_ANCESTOR_DEPTH; depth += 1) {
@@ -7762,7 +7767,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        if (rows.length === 0) {
          if (depth === 1) {
            throw new errors.NotFoundError(`Entity ${currentRef} not found`);
-@@ -6784,7 +7641,10 @@ class DefaultCatalogDatabase {
+@@ -6784,7 +7646,10 @@ class DefaultCatalogDatabase {
            `Entity ${entityRef} has a broken parent reference chain at ${currentRef}`
          );
        }
@@ -7774,7 +7779,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        if (!parentRef) {
          return { entityRefs };
        }
-@@ -6798,15 +7658,27 @@ class DefaultCatalogDatabase {
+@@ -6798,15 +7663,27 @@ class DefaultCatalogDatabase {
    async refresh(txOpaque, options) {
      const tx = txOpaque;
      const { entityRef } = options;
@@ -7805,7 +7810,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
  var __publicField = (obj, key, value) => {
    __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
    return value;
-@@ -6878,7 +7750,7 @@ class CatalogBuilder {
+@@ -6878,7 +7755,7 @@ class CatalogBuilder {
    setProcessingIntervalSeconds(seconds) {
      this.processingInterval = createRandomProcessingInterval({
        minSeconds: seconds,
@@ -7814,7 +7819,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
      return this;
    }
-@@ -6992,7 +7864,7 @@ class CatalogBuilder {
+@@ -6992,7 +7869,7 @@ class CatalogBuilder {
        new FileReaderProcessor(),
        new UrlReaderProcessor({ reader, logger }),
        CodeOwnersProcessor.fromConfig(config, { logger, reader }),
@@ -7823,7 +7828,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      ];
    }
    /**
-@@ -7076,11 +7948,11 @@ class CatalogBuilder {
+@@ -7076,11 +7953,11 @@ class CatalogBuilder {
        logger,
        permissions,
        scheduler,
@@ -7837,7 +7842,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
      const policy = this.buildEntityPolicy();
      const processors = this.buildProcessors();
-@@ -7092,21 +7964,21 @@ class CatalogBuilder {
+@@ -7092,21 +7969,21 @@ class CatalogBuilder {
      }
      const stitcher = DefaultStitcher.fromConfig(config, {
        knex: dbClient,
@@ -7863,7 +7868,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
      const integrations = integration.ScmIntegrations.fromConfig(config);
      const rulesEnforcer = DefaultCatalogRulesEnforcer.fromConfig(config);
-@@ -7117,12 +7989,12 @@ class CatalogBuilder {
+@@ -7117,12 +7994,12 @@ class CatalogBuilder {
        logger,
        parser,
        policy,
@@ -7878,7 +7883,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
      let permissionsService;
      if ("authorizeConditional" in permissions) {
-@@ -7131,37 +8003,48 @@ class CatalogBuilder {
+@@ -7131,37 +8008,48 @@ class CatalogBuilder {
        logger.warn(
          "PermissionAuthorizer is deprecated. Please use an instance of PermissionEvaluator instead of PermissionAuthorizer in PluginEnvironment#permissions"
        );
@@ -7952,7 +7957,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      const locationStore = new DefaultLocationStore(dbClient);
      const configLocationProvider = new ConfigLocationEntityProvider(config);
      const entityProviders = lodash__default.default.uniqBy(
-@@ -7182,12 +8065,19 @@ class CatalogBuilder {
+@@ -7182,12 +8070,19 @@ class CatalogBuilder {
          var _a2;
          (_a2 = this.onProcessingError) == null ? void 0 : _a2.call(this, event);
        },
@@ -7975,7 +7980,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        }),
        permissionsService
      );
-@@ -7205,7 +8095,7 @@ class CatalogBuilder {
+@@ -7205,7 +8100,7 @@ class CatalogBuilder {
        config,
        permissionIntegrationRouter,
        auth,
@@ -7984,7 +7989,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
      await connectEntityProviders(providerDatabase, entityProviders);
      return {
-@@ -7217,24 +8107,26 @@ class CatalogBuilder {
+@@ -7217,24 +8112,26 @@ class CatalogBuilder {
          async stop() {
            await processingEngine.stop();
            await stitcher.stop();
@@ -8022,7 +8027,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      return catalogModel.EntityPolicies.allOf(entityPolicies);
    }
    buildProcessors() {
-@@ -7245,19 +8137,23 @@ class CatalogBuilder {
+@@ -7245,19 +8142,23 @@ class CatalogBuilder {
        json: jsonPlaceholderResolver,
        yaml: yamlPlaceholderResolver,
        text: textPlaceholderResolver,
@@ -8052,7 +8057,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
        processors.push(builtinKindsEntityProcessor);
      }
      if (!this.processorsReplace) {
-@@ -7300,11 +8196,20 @@ class CatalogBuilder {
+@@ -7300,11 +8201,20 @@ class CatalogBuilder {
        return;
      }
      const locationTypes = new Set(
@@ -8075,7 +8080,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
          throw new Error(
            [
              `Your config contains a "catalog.locations" entry of type ${locationType},`,
-@@ -7313,7 +8218,7 @@ class CatalogBuilder {
+@@ -7313,7 +8223,7 @@ class CatalogBuilder {
              `external module that has to be installed manually. Please follow the installation`,
              `instructions at ${installationUrl} if you are using this ability, or remove the`,
              `location from your app config if you do not. You can also silence this check entirely`,
@@ -8084,7 +8089,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
            ].join(" ")
          );
        }
-@@ -7369,11 +8274,11 @@ class CatalogBuilder {
+@@ -7369,11 +8279,11 @@ class CatalogBuilder {
      if (!config$1.has(processingIntervalKey)) {
        return createRandomProcessingInterval({
          minSeconds: 100,
@@ -8098,7 +8103,7 @@ index 2bfa6ffb0c9dc14d8916749c1413bb9fe61456a6..7cb2fb258aa10e4ac98a70b1e82b10a9
      });
      const seconds = Math.max(
        1,
-@@ -7381,7 +8286,7 @@ class CatalogBuilder {
+@@ -7381,7 +8291,7 @@ class CatalogBuilder {
      );
      return createRandomProcessingInterval({
        minSeconds: seconds,

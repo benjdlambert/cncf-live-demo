@@ -4356,7 +4356,7 @@ __metadata:
 
 "@backstage/plugin-catalog-backend@patch:@backstage/plugin-catalog-backend@npm%3A1.22.0#~/.yarn/patches/@backstage-plugin-catalog-backend-npm-1.22.0-5e629afc1b.patch":
   version: 1.22.0
-  resolution: "@backstage/plugin-catalog-backend@patch:@backstage/plugin-catalog-backend@npm%3A1.22.0#~/.yarn/patches/@backstage-plugin-catalog-backend-npm-1.22.0-5e629afc1b.patch::version=1.22.0&hash=19e96a"
+  resolution: "@backstage/plugin-catalog-backend@patch:@backstage/plugin-catalog-backend@npm%3A1.22.0#~/.yarn/patches/@backstage-plugin-catalog-backend-npm-1.22.0-5e629afc1b.patch::version=1.22.0&hash=7fa7b7"
   dependencies:
     "@backstage/backend-common": "npm:^0.22.0"
     "@backstage/backend-openapi-utils": "npm:^0.1.11"
@@ -4394,7 +4394,7 @@ __metadata:
     yaml: "npm:^2.0.0"
     yn: "npm:^4.0.0"
     zod: "npm:^3.22.4"
-  checksum: 10c0/8d9e14aaf3e34cad79a659b9da377f50030118e66803154ce395ecc39a8858bd1cd837defff0b4eb4b97afad793e4af0a3080543665f436d04f8b4b867941ede
+  checksum: 10c0/6ef494794f40dbc8ec701f708a91f859d9d052c1448ca0315a78dacb45a224551b55881ec1ae10dc09e77917ea5527adcac0df44f9bb059551defb6443d2018d
   languageName: node
   linkType: hard
 
