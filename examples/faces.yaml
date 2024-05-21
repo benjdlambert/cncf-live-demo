@@ -22,7 +22,7 @@ metadata:
   description: The Faces GUI
   namespace: faces
   annotations:
-    backstage.io/kubernetes-id: faces-gui
+    backstage.io/kubernetes-label-selector: service=faces-gui
     backstage.io/kubernetes-namespace: faces
     github.com/project-slug: BuoyantIO/faces-demo
   links:
@@ -41,7 +41,7 @@ metadata:
   description: Face workload
   namespace: faces
   annotations:
-    backstage.io/kubernetes-id: face
+    backstage.io/kubernetes-label-selector: service=face
     backstage.io/kubernetes-namespace: faces
     backstage.io/source-location: url:https://github.com/BuoyantIO/faces-demo
     github.com/project-slug: BuoyantIO/faces-demo
@@ -63,7 +63,7 @@ metadata:
   description: The smiley workload
   namespace: faces
   annotations:
-    backstage.io/kubernetes-id: smiley
+    backstage.io/kubernetes-label-selector: service=smiley
     backstage.io/kubernetes-namespace: faces
     github.com/project-slug: BuoyantIO/faces-demo
   links: []
@@ -81,7 +81,7 @@ metadata:
   description: The color workload
   namespace: faces
   annotations:
-    backstage.io/kubernetes-id: color
+    backstage.io/kubernetes-label-selector: service=color
     backstage.io/kubernetes-namespace: faces
     github.com/project-slug: BuoyantIO/faces-demo
   links: []
