@@ -11,13 +11,15 @@ backend:
   baseUrl: http://localhost:7007
   # The listener can also be expressed as a single <host>:<port> string. In this case we bind to
   # all interfaces, the most permissive setting. The right value depends on your specific deployment.
-  listen: ':7007'
-
+  listen: ":7007"
 
 auth:
   providers:
-    guest: 
+    guest:
       dangerouslyAllowOutsideDevelopment: true
+
+linkerd:
+  deployedWithControlPlane: true
 
 kubernetes:
   serviceLocatorMethod:
@@ -42,9 +44,6 @@ catalog:
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
       target: ./examples/entities.yaml
-    
-    - type: file
-      target: ./examples/faces.yaml
 
     # Local example template
     - type: file

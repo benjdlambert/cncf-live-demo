@@ -32,6 +32,8 @@ import {
   isGithubActionsAvailable,
   EntityGithubActionsContent,
 } from '@backstage-community/plugin-github-actions';
+import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
+
 import {
   EntityUserProfileCard,
   EntityGroupProfileCard,
@@ -119,13 +121,14 @@ const entityWarningContent = (
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
+    <LinkerdIsMeshedBanner />
   </>
 );
 
 const overviewContent = (
   <Grid container spacing={3} alignItems="stretch">
     {entityWarningContent}
-    <LinkerdIsMeshedBanner />
+
     <Grid item md={6}>
       <EntityAboutCard variant="gridItem" />
     </Grid>
@@ -150,6 +153,10 @@ const serviceEntityPage = (
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/kubernetes" title="Kubernetes">
+      <EntityKubernetesContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">
@@ -188,6 +195,10 @@ const websiteEntityPage = (
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/kubernetes" title="Kubernetes">
+      <EntityKubernetesContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/dependencies" title="Dependencies">

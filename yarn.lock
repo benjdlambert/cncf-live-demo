@@ -2883,9 +2883,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-linkerd-backend@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@backstage-community/plugin-linkerd-backend@npm:0.2.0"
+"@backstage-community/plugin-linkerd-backend@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@backstage-community/plugin-linkerd-backend@npm:0.2.1"
   dependencies:
     "@backstage/backend-common": "npm:^0.21.7"
     "@backstage/backend-defaults": "npm:^0.2.17"
@@ -2901,7 +2901,7 @@ __metadata:
     qs: "npm:^6.12.0"
     winston: "npm:^3.2.1"
     yn: "npm:^4.0.0"
-  checksum: 10c0/b9b92fe91f09a5adbdb3d08a305b72ff885ffd349533e552a4bd2b8d5f97cde1ae8e4fba9fd16d0fbcdb76ca0b606fce401556b5bacdbec25cc1b9e749b54d4c
+  checksum: 10c0/c0a52dcafd93b2670b6b9e59a4d9080e46c82ca701046f3a2d9f9da1dbbb7663c7224f0e89e3d4bc712eae7c0771fb643bacb85e035b0ce073f3ad3426d59f50
   languageName: node
   linkType: hard
 
@@ -4693,6 +4693,69 @@ __metadata:
     node-fetch: "npm:^2.6.7"
     winston: "npm:^3.2.1"
   checksum: 10c0/468b83f09018738045897ba53c8b47b21b1d3bde7d1654920ac9844e54acf0d84bd4c98e9cbf35b3af6d55475a37dc274797ae9c5737253f0ba65edaf53b4a30
+  languageName: node
+  linkType: hard
+
+"@backstage/plugin-kubernetes-react@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "@backstage/plugin-kubernetes-react@npm:0.3.5"
+  dependencies:
+    "@backstage/catalog-model": "npm:^1.5.0"
+    "@backstage/core-components": "npm:^0.14.7"
+    "@backstage/core-plugin-api": "npm:^1.9.2"
+    "@backstage/errors": "npm:^1.2.4"
+    "@backstage/plugin-kubernetes-common": "npm:^0.7.6"
+    "@backstage/types": "npm:^1.1.1"
+    "@kubernetes-models/apimachinery": "npm:^1.1.0"
+    "@kubernetes-models/base": "npm:^4.0.1"
+    "@kubernetes/client-node": "npm:^0.20.0"
+    "@material-ui/core": "npm:^4.9.13"
+    "@material-ui/icons": "npm:^4.11.3"
+    "@material-ui/lab": "npm:^4.0.0-alpha.61"
+    "@types/react": "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
+    cronstrue: "npm:^2.32.0"
+    js-yaml: "npm:^4.1.0"
+    kubernetes-models: "npm:^4.3.1"
+    lodash: "npm:^4.17.21"
+    luxon: "npm:^3.0.0"
+    react-use: "npm:^17.4.0"
+    xterm: "npm:^5.3.0"
+    xterm-addon-attach: "npm:^0.9.0"
+    xterm-addon-fit: "npm:^0.8.0"
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/3d8f020f1701590ac00bc8bffe231ea51f64fc5bdceeb52aabdeb10693dbac1b0b58aa899e10a8ac0a2d717b1522b01b578d2c713ebbe6ea806de0d15313638d
+  languageName: node
+  linkType: hard
+
+"@backstage/plugin-kubernetes@npm:^0.11.10":
+  version: 0.11.10
+  resolution: "@backstage/plugin-kubernetes@npm:0.11.10"
+  dependencies:
+    "@backstage/catalog-model": "npm:^1.5.0"
+    "@backstage/core-components": "npm:^0.14.7"
+    "@backstage/core-plugin-api": "npm:^1.9.2"
+    "@backstage/plugin-catalog-react": "npm:^1.12.0"
+    "@backstage/plugin-kubernetes-common": "npm:^0.7.6"
+    "@backstage/plugin-kubernetes-react": "npm:^0.3.5"
+    "@kubernetes-models/apimachinery": "npm:^1.1.0"
+    "@kubernetes-models/base": "npm:^4.0.1"
+    "@kubernetes/client-node": "npm:0.20.0"
+    "@material-ui/core": "npm:^4.12.2"
+    "@types/react": "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
+    cronstrue: "npm:^2.2.0"
+    js-yaml: "npm:^4.0.0"
+    kubernetes-models: "npm:^4.1.0"
+    lodash: "npm:^4.17.21"
+    luxon: "npm:^3.0.0"
+    xterm: "npm:^5.2.1"
+    xterm-addon-attach: "npm:^0.9.0"
+    xterm-addon-fit: "npm:^0.8.0"
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-router-dom: 6.0.0-beta.0 || ^6.3.0
+  checksum: 10c0/61620a48d7cbb1ab0925dcc9c4c5ad5e9ceefc612341759d0f42d136fffa747dfda0f32b95061d2298af6d20b3156d3b451c3eea857883423fe84e6d90d41bea
   languageName: node
   linkType: hard
 
@@ -7185,7 +7248,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kubernetes-models/apimachinery@npm:^1.2.1":
+"@kubernetes-models/apimachinery@npm:^1.1.0, @kubernetes-models/apimachinery@npm:^1.2.1":
   version: 1.2.1
   resolution: "@kubernetes-models/apimachinery@npm:1.2.1"
   dependencies:
@@ -7196,7 +7259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kubernetes-models/base@npm:^4.0.3":
+"@kubernetes-models/base@npm:^4.0.1, @kubernetes-models/base@npm:^4.0.3":
   version: 4.0.3
   resolution: "@kubernetes-models/base@npm:4.0.3"
   dependencies:
@@ -7446,7 +7509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@material-ui/icons@npm:^4.9.1":
+"@material-ui/icons@npm:^4.11.3, @material-ui/icons@npm:^4.9.1":
   version: 4.11.3
   resolution: "@material-ui/icons@npm:4.11.3"
   dependencies:
@@ -14178,6 +14241,7 @@ __metadata:
     "@backstage/plugin-catalog-graph": "npm:^0.4.5"
     "@backstage/plugin-catalog-import": "npm:^0.11.0"
     "@backstage/plugin-catalog-react": "npm:^1.12.0"
+    "@backstage/plugin-kubernetes": "npm:^0.11.10"
     "@backstage/plugin-org": "npm:^0.6.25"
     "@backstage/plugin-permission-react": "npm:^0.4.22"
     "@backstage/plugin-scaffolder": "npm:^1.20.0"
@@ -14849,7 +14913,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
-    "@backstage-community/plugin-linkerd-backend": "npm:^0.2.0"
+    "@backstage-community/plugin-linkerd-backend": "npm:^0.2.1"
     "@backstage/backend-common": "npm:^0.22.0"
     "@backstage/backend-defaults": "npm:^0.2.18"
     "@backstage/backend-tasks": "npm:^0.5.23"
@@ -16752,6 +16816,15 @@ __metadata:
     "@types/luxon": "npm:~3.4.0"
     luxon: "npm:~3.4.0"
   checksum: 10c0/c009c79714ae2916233c8cd2700cdda17c9e20d0e8e32eeb6c0d63b8e89bb7c38dbf9f0423f0f6da52d3f054f735aabb988cbe5b25bb55d9c6ca48ed4cfaaaec
+  languageName: node
+  linkType: hard
+
+"cronstrue@npm:^2.2.0, cronstrue@npm:^2.32.0":
+  version: 2.50.0
+  resolution: "cronstrue@npm:2.50.0"
+  bin:
+    cronstrue: bin/cli.js
+  checksum: 10c0/9fec217cfc83a53842c04cab1103ffb077a33837ea0f03f8a0968fe548509134b6667303ee7188d00b555fb53ad82fef5b6cd0c1886f3ec34b74625b61c6c3d7
   languageName: node
   linkType: hard
 
@@ -23384,7 +23457,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kubernetes-models@npm:^4.3.1":
+"kubernetes-models@npm:^4.1.0, kubernetes-models@npm:^4.3.1":
   version: 4.3.1
   resolution: "kubernetes-models@npm:4.3.1"
   dependencies:
@@ -28842,7 +28915,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-use@npm:^17.2.4, react-use@npm:^17.3.2":
+"react-use@npm:^17.2.4, react-use@npm:^17.3.2, react-use@npm:^17.4.0":
   version: 17.5.0
   resolution: "react-use@npm:17.5.0"
   dependencies:
@@ -33833,6 +33906,31 @@ __metadata:
   version: 4.0.2
   resolution: "xtend@npm:4.0.2"
   checksum: 10c0/366ae4783eec6100f8a02dff02ac907bf29f9a00b82ac0264b4d8b832ead18306797e283cf19de776538babfdcb2101375ec5646b59f08c52128ac4ab812ed0e
+  languageName: node
+  linkType: hard
+
+"xterm-addon-attach@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "xterm-addon-attach@npm:0.9.0"
+  peerDependencies:
+    xterm: ^5.0.0
+  checksum: 10c0/bbecfd4daf5995014245cadcaddf0140b55cf0c80b37411ba0277fa7ba775fd7aab24431eb08161f7941ba605ae0946dbaded9fe753be881ae0d3c6d37bb8e63
+  languageName: node
+  linkType: hard
+
+"xterm-addon-fit@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "xterm-addon-fit@npm:0.8.0"
+  peerDependencies:
+    xterm: ^5.0.0
+  checksum: 10c0/39f77c9ec74bcc048ad74fbc4b9d610070c0a67971837f7edf92a8d21d65189c887986713d6ab22c04e2704253022488324d27fdb2425dc8aa95a9b679703101
+  languageName: node
+  linkType: hard
+
+"xterm@npm:^5.2.1, xterm@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "xterm@npm:5.3.0"
+  checksum: 10c0/39bf5ea933cc2f65d5970560d065b4db645ed03c820bcf6c6239bd504e41a876ab1a773ad9e4e09476ba85a4891534702b9fbb885b0838d79e6620ed2f856bae
   languageName: node
   linkType: hard
 
