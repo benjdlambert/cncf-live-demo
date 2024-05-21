@@ -2883,9 +2883,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-linkerd-backend@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@backstage-community/plugin-linkerd-backend@npm:0.2.1"
+"@backstage-community/plugin-linkerd-backend@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "@backstage-community/plugin-linkerd-backend@npm:0.2.2"
   dependencies:
     "@backstage/backend-common": "npm:^0.21.7"
     "@backstage/backend-defaults": "npm:^0.2.17"
@@ -2901,7 +2901,7 @@ __metadata:
     qs: "npm:^6.12.0"
     winston: "npm:^3.2.1"
     yn: "npm:^4.0.0"
-  checksum: 10c0/c0a52dcafd93b2670b6b9e59a4d9080e46c82ca701046f3a2d9f9da1dbbb7663c7224f0e89e3d4bc712eae7c0771fb643bacb85e035b0ce073f3ad3426d59f50
+  checksum: 10c0/c859265e7fcc4be6b72b642f575688e5112ea8bc71ddc458a8fa8172b85ae6ec64d3ab8cda2058f52bbec4a26c6590a485cf61dc03717e6850593669093a89b2
   languageName: node
   linkType: hard
 
@@ -14913,7 +14913,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
-    "@backstage-community/plugin-linkerd-backend": "npm:^0.2.1"
+    "@backstage-community/plugin-linkerd-backend": "npm:^0.2.2"
     "@backstage/backend-common": "npm:^0.22.0"
     "@backstage/backend-defaults": "npm:^0.2.18"
     "@backstage/backend-tasks": "npm:^0.5.23"
