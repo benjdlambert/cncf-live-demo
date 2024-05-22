@@ -195,10 +195,10 @@ const serviceEntityPage = (
       if={entity => entity.metadata.namespace === 'faces'}
     >
       <Grid container spacing={3} alignItems="stretch">
-        <Grid item md={6}>
+        <Grid item md={12}>
           <LinkerdDependenciesCard />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={12}>
           <LinkerdEdgesTable />
         </Grid>
       </Grid>
@@ -241,10 +241,10 @@ const websiteEntityPage = (
       if={entity => entity.metadata.namespace === 'faces'}
     >
       <Grid container spacing={3} alignItems="stretch">
-        <Grid item md={6}>
+        <Grid item md={12}>
           <LinkerdDependenciesCard />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={12}>
           <LinkerdEdgesTable />
         </Grid>
       </Grid>

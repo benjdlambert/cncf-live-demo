@@ -183,3 +183,63 @@ time... but of course, with just Linkerd we don't know much more about these
 microservices.
 
 This is where an internal developer platform comes in.
+
+## Installing Backstage
+
+Backstage is a framework for building our developer platforms and portals, and
+luckily we've used that framework to build our very own just for this demo!
+This repository was created using `npx @backstage/create-app` and then customized
+a little bit for this demo by adding a few additional plugins, it then produces a
+docker container of the Developer Platform ready to deploy into your cluster.
+
+Let's go ahead and instalt it into the cluster.
+
+```bash
+kubectl apply -f ./k8s
+```
+
+We can check that this has been deployed and ready by checking the pods:
+
+```bash
+kubectl get pods -n backstage
+```
+
+For the purposes of this demo, we're not going to deploy it to the public internet,
+but just use `kubectl port-forward` to access it and keep it running for the
+remainder of this demo. Ugly, we know, but it's just for demo purposes.
+
+In the real world you would most likely deploy Backstage to a proper domain
+behind authenticating proxy and/or VPN.
+
+```bash
+kubectl port-forward -n backstage deployment/backstage 7007:7007 &
+```
+
+Now we can access Backstage at http://localhost:7007.
+
+```bash
+open http://localhost:7007/catalog
+```
+
+## Exploring Backstage
+
+So first off what you're going to see in Backstage is the Software Catalog.
+This is the list of all of your software in your organization. It's pretty empty,
+just sample item inside there called `example-website`, which is just a demo component
+that we've added.
+
+Let's dive into the `example-website` component, we can do that by
+clicking on the `example-website` item in the table.
+
+```bash
+open http://localhost:70007/catalog/default/component/example-website
+```
+
+This is the `Entity Page` for the `example-website` component.
+Now this is basically where you can customizing your own view of what different entities
+of different kinds look like.
+
+For example, you might not want to show the `Kubernetes` tab if your service isn't deployed on `Kubernetes`.
+
+This page is fully customizable and you can add your own tabs, your own content, your own metadata, and so on.
+Each of these different cards and tabs come from plugins which you can take advantage from either Open Source, or by building your own.
