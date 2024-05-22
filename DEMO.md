@@ -221,12 +221,17 @@ Now we can access Backstage at http://localhost:7007.
 open http://localhost:7007/catalog
 ```
 
-## Exploring Backstage
+## Exploring the Backstage Software Catalog
 
 So first off what you're going to see in Backstage is the Software Catalog.
 This is the list of all of your software in your organization. It's pretty empty,
 just sample item inside there called `example-website`, which is just a demo component
 that we've added.
+
+This list of components can be ingested from a multitude of sources,
+and processed in different ways. It's recommended to keep a `catalog-info.yaml` file next to
+your software source code, in order to provide metadata about your component. We'll come onto
+that shortly when we want to add some information about our `faces` stack.
 
 Let's dive into the `example-website` component, we can do that by
 clicking on the `example-website` item in the table.
@@ -236,10 +241,10 @@ open http://localhost:70007/catalog/default/component/example-website
 ```
 
 This is the `Entity Page` for the `example-website` component.
-Now this is basically where you can customizing your own view of what different entities
-of different kinds look like.
 
-For example, you might not want to show the `Kubernetes` tab if your service isn't deployed on `Kubernetes`.
+Each of these different cards and tabs come from plugins which you can take advantage
+from either Open Source, or by building your own.
 
-This page is fully customizable and you can add your own tabs, your own content, your own metadata, and so on.
-Each of these different cards and tabs come from plugins which you can take advantage from either Open Source, or by building your own.
+Clicking through the Tabs at the top you can see things like `CI/CD` to show deployments
+and workflow runs, `Techdocs` for documentation on this particular software component and
+`Dependencies` to track what this component depends on and who depends on it.
