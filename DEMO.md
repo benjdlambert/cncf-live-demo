@@ -35,6 +35,7 @@ When you use `demosh` to run this file, your cluster will be checked for you.
 <!-- @start_livecast -->
 
 ---
+
 <!-- @SHOW -->
 
 # Backstage and Linkerd
@@ -59,7 +60,7 @@ probably a terrible idea for the real world! But it simplifies the demo.)
 
 ```bash
 helm install faces -n faces --create-namespace \
-     oci://ghcr.io/buoyantio/faces-chart --version 1.3.0 \
+     oci://ghcr.io/benjdlambert/faces-chart --version 0.0.3 \
      --set gui.serviceType=LoadBalancer
 
 kubectl rollout status -n faces deploy
@@ -182,4 +183,3 @@ time... but of course, with just Linkerd we don't know much more about these
 microservices.
 
 This is where an internal developer platform comes in.
-

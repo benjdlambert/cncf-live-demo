@@ -189,20 +189,20 @@ const serviceEntityPage = (
       {techdocsContent}
     </EntityLayout.Route>
 
-    <EntitySwitch>
-      <EntitySwitch.Case if={entity => entity.metadata.namespace === 'faces'}>
-        <EntityLayout.Route path="/linkerd" title="Linkerd">
-          <Grid container spacing={3} alignItems="stretch">
-            <Grid item md={6}>
-              <LinkerdDependenciesCard />
-            </Grid>
-            <Grid item md={6}>
-              <LinkerdEdgesTable />
-            </Grid>
-          </Grid>
-        </EntityLayout.Route>
-      </EntitySwitch.Case>
-    </EntitySwitch>
+    <EntityLayout.Route
+      path="/linkerd"
+      title="Linkerd"
+      if={entity => entity.metadata.namespace === 'faces'}
+    >
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item md={6}>
+          <LinkerdDependenciesCard />
+        </Grid>
+        <Grid item md={6}>
+          <LinkerdEdgesTable />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
   </EntityLayout>
 );
 
@@ -235,20 +235,20 @@ const websiteEntityPage = (
       {techdocsContent}
     </EntityLayout.Route>
 
-    <EntitySwitch>
-      <EntitySwitch.Case if={entity => entity.metadata.namespace === 'faces'}>
-        <EntityLayout.Route path="/linkerd" title="Linkerd">
-          <Grid container spacing={3} alignItems="stretch">
-            <Grid item md={6}>
-              <LinkerdDependenciesCard />
-            </Grid>
-            <Grid item md={6}>
-              <LinkerdEdgesTable />
-            </Grid>
-          </Grid>
-        </EntityLayout.Route>
-      </EntitySwitch.Case>
-    </EntitySwitch>
+    <EntityLayout.Route
+      path="/linkerd"
+      title="Linkerd"
+      if={entity => entity.metadata.namespace === 'faces'}
+    >
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item md={6}>
+          <LinkerdDependenciesCard />
+        </Grid>
+        <Grid item md={6}>
+          <LinkerdEdgesTable />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
   </EntityLayout>
 );
 
