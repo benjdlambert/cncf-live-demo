@@ -184,6 +184,8 @@ microservices.
 
 This is where an internal developer platform comes in.
 
+<!-- @wait_clear -->
+
 ## Installing Backstage
 
 Backstage is a framework for building our developer platforms and portals, and
@@ -192,27 +194,26 @@ This repository was created using `npx @backstage/create-app` and then customize
 a little bit for this demo by adding a few additional plugins, it then produces a
 docker container of the Developer Platform ready to deploy into your cluster.
 
-Let's go ahead and instalt it into the cluster.
+Let's go ahead and install it into the cluster.
 
 ```bash
+ls -l ./k8s
 kubectl apply -f ./k8s
 ```
 
 We can check that this has been deployed and ready by checking the pods:
 
 ```bash
-kubectl get pods -n backstage
+kubectl rollout status -n backstage deploy --timeout 90s
 ```
 
-For the purposes of this demo, we're not going to deploy it to the public internet,
-but just use `kubectl port-forward` to access it and keep it running for the
-remainder of this demo. Ugly, we know, but it's just for demo purposes.
-
-In the real world you would most likely deploy Backstage to a proper domain
-behind authenticating proxy and/or VPN.
+In the real world, you would deploy Backstage behind some kind of ingress
+controller with proper authentication, but for this demo, we're just going to
+use `kubectl port-forward` to access it. Ugly, we know, but it's just for demo
+purposes.
 
 ```bash
-kubectl port-forward -n backstage deployment/backstage 7007:7007 &
+kubectl port-forward -n backstage deployment/backstage 7007:7007
 ```
 
 Now we can access Backstage at http://localhost:7007.
