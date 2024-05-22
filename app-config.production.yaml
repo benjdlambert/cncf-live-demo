@@ -14,9 +14,15 @@ backend:
   listen: ":7007"
 
 auth:
+  environment: production
   providers:
     guest:
       dangerouslyAllowOutsideDevelopment: true
+
+    github:
+      production:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
 
 linkerd:
   deployedWithControlPlane: true

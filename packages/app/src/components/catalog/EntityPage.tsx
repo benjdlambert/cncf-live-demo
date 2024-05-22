@@ -40,7 +40,11 @@ import {
   EntityMembersListCard,
   EntityOwnershipCard,
 } from '@backstage/plugin-org';
-import { LinkerdIsMeshedBanner } from '@backstage-community/plugin-linkerd';
+import {
+  LinkerdIsMeshedBanner,
+  LinkerdDependenciesCard,
+  LinkerdEdgesTable,
+} from '@backstage-community/plugin-linkerd';
 import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { EmptyState } from '@backstage/core-components';
 import {
@@ -184,6 +188,21 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+
+    <EntitySwitch>
+      <EntitySwitch.Case if={entity => entity.metadata.namespace === 'faces'}>
+        <EntityLayout.Route path="/linkerd" title="Linkerd">
+          <Grid container spacing={3} alignItems="stretch">
+            <Grid item md={6}>
+              <LinkerdDependenciesCard />
+            </Grid>
+            <Grid item md={6}>
+              <LinkerdEdgesTable />
+            </Grid>
+          </Grid>
+        </EntityLayout.Route>
+      </EntitySwitch.Case>
+    </EntitySwitch>
   </EntityLayout>
 );
 
@@ -215,6 +234,21 @@ const websiteEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+
+    <EntitySwitch>
+      <EntitySwitch.Case if={entity => entity.metadata.namespace === 'faces'}>
+        <EntityLayout.Route path="/linkerd" title="Linkerd">
+          <Grid container spacing={3} alignItems="stretch">
+            <Grid item md={6}>
+              <LinkerdDependenciesCard />
+            </Grid>
+            <Grid item md={6}>
+              <LinkerdEdgesTable />
+            </Grid>
+          </Grid>
+        </EntityLayout.Route>
+      </EntitySwitch.Case>
+    </EntitySwitch>
   </EntityLayout>
 );
 
