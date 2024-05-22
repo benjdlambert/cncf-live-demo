@@ -125,7 +125,6 @@ const entityWarningContent = (
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
-    <LinkerdIsMeshedBanner />
   </>
 );
 
@@ -152,7 +151,10 @@ const overviewContent = (
 const serviceEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
-      {overviewContent}
+      <>
+        <LinkerdIsMeshedBanner />
+        {overviewContent}
+      </>
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
@@ -209,7 +211,10 @@ const serviceEntityPage = (
 const websiteEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
-      {overviewContent}
+      <>
+        <LinkerdIsMeshedBanner />
+        {overviewContent}
+      </>
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">

@@ -2883,9 +2883,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-linkerd-backend@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@backstage-community/plugin-linkerd-backend@npm:0.3.0"
+"@backstage-community/plugin-linkerd-backend@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@backstage-community/plugin-linkerd-backend@npm:0.3.1"
   dependencies:
     "@backstage/backend-common": "npm:^0.22.0"
     "@backstage/backend-defaults": "npm:^0.2.18"
@@ -2901,13 +2901,13 @@ __metadata:
     qs: "npm:^6.12.0"
     winston: "npm:^3.2.1"
     yn: "npm:^4.0.0"
-  checksum: 10c0/34c49ac291f428658d4d6fc33df29145d4e59d700c2b58d503393e47443c03459087bf220de235c39f30c95a0e13abe97a5d93e29fe6b375e7e01b968e5b3fae
+  checksum: 10c0/767dc3ed45b84d2d69de780ee3218493df68cc31558dee26b6d8268c2e55818f04cef68563c5ee42fb752baf768b18f4d824047508746f61434d66f4e507227f
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-linkerd@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@backstage-community/plugin-linkerd@npm:0.3.0"
+"@backstage-community/plugin-linkerd@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@backstage-community/plugin-linkerd@npm:0.3.1"
   dependencies:
     "@backstage/catalog-model": "npm:^1.5.0"
     "@backstage/core-plugin-api": "npm:^1.9.2"
@@ -2922,7 +2922,7 @@ __metadata:
     reactflow: "npm:^11.11.0"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/ae2c0fffee6a0570178f0b3ff0b5861c8c2651166e4121cf00fa028e8804abb29d4b72ecaefb90152ea32b10ad0d702026525c773ffd42cd98c5d0a801e9966f
+  checksum: 10c0/86aaf03ae9960f876ee4c24def2257a4c55859ab530cd483fe04d9087a2530ef673fdf3f0d2f69f2aae25299f38eb4ac79c45de550b258ff0c7e01b6ea1fd688
   languageName: node
   linkType: hard
 
@@ -13977,7 +13977,7 @@ __metadata:
   resolution: "app@workspace:packages/app"
   dependencies:
     "@backstage-community/plugin-github-actions": "npm:^0.6.16"
-    "@backstage-community/plugin-linkerd": "npm:^0.3.0"
+    "@backstage-community/plugin-linkerd": "npm:^0.3.1"
     "@backstage-community/plugin-tech-radar": "npm:^0.7.4"
     "@backstage/app-defaults": "npm:^1.5.5"
     "@backstage/catalog-model": "npm:^1.5.0"
@@ -14664,7 +14664,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
-    "@backstage-community/plugin-linkerd-backend": "npm:^0.3.0"
+    "@backstage-community/plugin-linkerd-backend": "npm:^0.3.1"
     "@backstage/backend-common": "npm:^0.22.0"
     "@backstage/backend-defaults": "npm:^0.2.18"
     "@backstage/backend-tasks": "npm:^0.5.23"
