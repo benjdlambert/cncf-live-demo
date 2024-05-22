@@ -1,3 +1,4 @@
+<!--
 # SPDX-FileCopyrightText: 2024 Buoyant Inc.
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -14,6 +15,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+ -->
 
 # Backstage and Linkerd
 
@@ -33,7 +35,7 @@ When you use `demosh` to run this file, your cluster will be checked for you.
 <!-- @start_livecast -->
 
 ---
-<!-- @SKIP -->
+<!-- @SHOW -->
 
 # Backstage and Linkerd
 
@@ -145,8 +147,6 @@ Finally, we can check that everything is working as expected.
 linkerd check
 ```
 
-<!-- @SHOW -->
-
 ## Meshing Faces
 
 Once we have Linkerd installed, we can mesh Faces. We'll do this the easy way,
@@ -177,4 +177,9 @@ looking at the Linkerd dashboard.
 linkerd viz dashboard
 ```
 
+This is an improvement! We can start to see what's happening in Faces in real
+time... but of course, with just Linkerd we don't know much more about these
+microservices.
+
+This is where an internal developer platform comes in.
 
